@@ -40,4 +40,4 @@ ENV SERVER_PORT=8080
 USER appuser
 
 # Command to run the server
-CMD ["uvicorn", "run", "piper_tts_server:app", "--host", "0.0.0.0", "--port", "8080"]
+CMD ["uvicorn", "piper_tts_server:app", "--host", "0.0.0.0", "--port", "8080"]
