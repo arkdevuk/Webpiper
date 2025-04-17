@@ -60,6 +60,7 @@ class SynthesizeRequest(BaseModel):
     text: str
     local: Optional[str] = "fr_FR"
     voice: Optional[str] = "siwis-medium"
+    silence: Optional[int] = None # in seconds
 
 # Cleanup function to delete files older than 1 hour
 def cleanup_old_files():
