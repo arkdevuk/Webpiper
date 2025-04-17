@@ -40,7 +40,7 @@ import glob
 # Config
 SERVER_PORT = int(os.getenv("SERVER_PORT", 8000))
 OUTPUT_DIR = Path("/output").resolve()
-VOICES_DIR = Path("/voices").resolve()
+VOICES_DIR = Path("/voice").resolve()
 
 OUTPUT_DIR.mkdir(exist_ok=True)
 
