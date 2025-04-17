@@ -26,18 +26,18 @@ WORKDIR /app
 # Copy the FastAPI app code into the container
 COPY app/ .
 
-# Switch to non-root user
-USER appuser
-
 # Install Python dependencies
-RUN pip3 install -U -r requirements.txt
+RUN pip install --no-cache-dir --upgrade -r requirements.txt
 
 # Set environment variable for server port
 ENV SERVER_PORT=8080
 
 # Healthcheck to ensure the server is responsive
-HEALTHCHECK --interval=30s --timeout=5s --start-period=10s --retries=3 \
-  CMD curl --fail http://localhost:${SERVER_PORT}/api/healthcheck || exit 1
+#HEALTHCHECK --interval=30s --timeout=5s --start-period=10s --retries=3 \
+#  CMD curl --fail http://localhost:${SERVER_PORT}/api/healthcheck || exit 1
+
+# Switch to non-root user
+USER appuser
 
 # Command to run the server
-CMD ["uvicorn", "piper_tts_server:app", "--host", "0.0.0.0", "--port", "8080"]
+CMD ["fastapi", "run", "piper_tts_server:app", "--host", "0.0.0.0", "--port", "8080"]
