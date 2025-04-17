@@ -78,6 +78,11 @@ async def synthesize(req: SynthesizeRequest):
 
     model_path = VOICES_DIR / f"{req.local}-{req.voice}.onnx"
 
+    silenceLength = 1
+    # get from request
+    if req.silence is not None:
+        silenceLength = req.silence
+
     if not model_path.exists():
         raise HTTPException(status_code=400, detail="Voice model not found")
 
@@ -87,6 +92,7 @@ async def synthesize(req: SynthesizeRequest):
                 "piper",
                 "--model", str(model_path),
                 "--output_file", str(output_path),
+                "--sentence-silence " + str(silenceLength),
             ],
             input=req.text.encode("utf-8"),
             check=True
