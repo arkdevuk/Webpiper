@@ -17,6 +17,9 @@ RUN mkdir -p /voice /output /app && \
 # Copy voice models into the container
 COPY voices/ /voice/
 
+# create app directory and set permissions
+RUN mkdir /app && chown appuser:appuser /app
+
 # Set the working directory
 WORKDIR /app
 
