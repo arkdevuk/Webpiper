@@ -38,10 +38,9 @@ from pathlib import Path
 import glob
 
 # Config
-SERVER_PORT = int(os.getenv("SERVER_PORT", 8000))
-BASE_DIR = Path(__file__).resolve().parent
-OUTPUT_DIR = BASE_DIR / "output"
-VOICES_DIR = BASE_DIR / "voices"
+SERVER_PORT = int(os.getenv("SERVER_PORT", 8080))
+OUTPUT_DIR = "/output"
+VOICES_DIR = "/voices"
 
 OUTPUT_DIR.mkdir(exist_ok=True)
 
