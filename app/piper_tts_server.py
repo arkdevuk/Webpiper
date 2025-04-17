@@ -61,6 +61,8 @@ class SynthesizeRequest(BaseModel):
     local: Optional[str] = "fr_FR"
     voice: Optional[str] = "siwis-medium"
     silence: Optional[int] = None # in seconds
+    speed: Optional[float] = 1.0 # in seconds
+    noise_w: Optional[float] = 0.8 # in seconds
 
 # Cleanup function to delete files older than 1 hour
 def cleanup_old_files():
@@ -84,6 +86,16 @@ async def synthesize(req: SynthesizeRequest):
     if req.silence is not None:
         silenceLength = req.silence
 
+    speed = 1.0
+    # get from request
+    if req.speed is not None:
+        speed = req.speed
+
+    noise_w = 0.8
+    # get from request
+    if req.noise_w is not None:
+        noise_w = req.noise_w
+
     if not model_path.exists():
         raise HTTPException(status_code=400, detail="Voice model not found")
 
@@ -94,6 +106,8 @@ async def synthesize(req: SynthesizeRequest):
                 "--model", str(model_path),
                 "--output_file", str(output_path),
                 "--sentence-silence", str(silenceLength),
+                "--length_scale", str(speed),
+                "--noise_w", str(noise_w),
             ],
             input=req.text.encode("utf-8"),
             check=True
