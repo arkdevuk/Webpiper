@@ -18,7 +18,7 @@ RUN mkdir -p /voice /output /app && \
 COPY voices/ /voice/
 
 # create app directory and set permissions
-RUN mkdir /app && chown appuser:appuser /app
+RUN chown appuser:appuser /app
 
 # Set the working directory
 WORKDIR /app

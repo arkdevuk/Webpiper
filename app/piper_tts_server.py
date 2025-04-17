@@ -1,3 +1,4 @@
+# inspiration : https://github.com/peteh/mary-piper
 # I have installed on this container a Python package called `piper` that is a TTS engine.
 # echo 'Welcome to the world of speech synthesis!' | \
 #    ./piper --model en_US-lessac-medium.onnx --output_file welcome.wav
