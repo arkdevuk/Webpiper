@@ -41,3 +41,4 @@ USER appuser
 
 # Command to run the server
 CMD ["uvicorn", "piper_tts_server:app", "--host", "0.0.0.0", "--port", "8080"]
+# to test in cli you can run:
