@@ -2,7 +2,7 @@ import argparse
 from tts import synthesize_text
 from audio_utils import to_portable_file
 from audio_file_utils import AudioFileUtils
-from effects import flanger, normalize, pitch_shift
+from effects.chain_processor import EffectChainProcessor
 import json
 
 
@@ -33,17 +33,17 @@ def main():
         )
 
         if args.effects:
-            # transform the json data to a dict
+            # Parse effects JSON
             effects_data = json.loads(args.effects)
-            # Check if the effects are valid
-            if not isinstance(effects_data, dict):
-                raise ValueError("Effects should be a JSON object")
-            # Load the audio file
-            audio, framerate =  AudioFileUtils.wav_to_audio(output_file)
-            # Apply effects
-            audio = flanger.apply_flanger(audio, framerate)
-            audio = normalize.apply_normalize(audio, framerate)
-            audio = pitch_shift.apply_pitch_shift(audio, framerate, pitch_change=35)
+            if not isinstance(effects_data, list):
+                raise ValueError("Effects should be a JSON array of effect steps")
+
+            # Load audio
+            audio, framerate = AudioFileUtils.wav_to_audio(output_file)
+
+            # Process chain
+            processor = EffectChainProcessor()
+            audio = processor.apply_chain(audio, framerate, effects_data)
 
             # Save result
             AudioFileUtils.audio_to_wav(audio, framerate, output_file)

@@ -1,7 +1,8 @@
 #!/bin/bash
 # set current directory to CURRENT_DIR
 CURRENT_DIR=$(cd "$(dirname "$0")" && pwd)
-export OUTPUT_PATH=$CURRENT_DIR/output
-export VOICE_PATH=$CURRENT_DIR/voice
+echo export OUTPUT_PATH="$CURRENT_DIR/output"
+echo export VOICE_PATH="$CURRENT_DIR/voices"
+echo "Current directory: $CURRENT_DIR"
 # CD current directory && uvicorn server
-cd $CURRENT_DIR/app  && uvicorn piper_tts_server:app --host 0.0.0.0 --port 8098
+#cd $CURRENT_DIR/app  && uvicorn piper_tts_server:app --host 0.0.0.0 --port 8098
