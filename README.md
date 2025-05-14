@@ -155,4 +155,5 @@ MIT License
 
 * [Piper](https://github.com/rhasspy/piper) - Lightweight, fast TTS engine
 * [FastAPI](https://fastapi.tiangolo.com/) - High performance web framework
+* [Voicebox](https://voicebox.readthedocs.io/en/stable/index.html) - Inspiration to build the effects feature
 
