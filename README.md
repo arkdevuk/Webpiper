@@ -156,7 +156,3 @@ MIT License
 * [Piper](https://github.com/rhasspy/piper) - Lightweight, fast TTS engine
 * [FastAPI](https://fastapi.tiangolo.com/) - High performance web framework
 
----
-
-Would you also like me to generate a **preset system (e.g. `preset=radio_voice`) for the effects**, loaded from a JSON/YAML file?
-Reply with `Yes presets please` if you'd like that feature too.
