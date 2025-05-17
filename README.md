@@ -6,15 +6,19 @@ A simple, containerized web API for real-time text-to-speech (TTS) synthesis usi
 
 * 📥 Accepts text input and returns a synthesized speech `.wav` file
 * 🧹 Automatically deletes audio files older than 1 hour
-* 🎙️ Supports multiple voices and languages
-* 🪄 Apply custom audio effects via JSON-defined effect chains
-* 💾 Optionally convert output files to portable  WAV format :
-  * ✔ 1 channel (mono)
+* 🎙️ Supports multiple languages and voice models (`.onnx`)
+* 🪄 Apply custom audio effects via JSON-defined **effect chains**
+* 🎛️ Effects include: `pitch_shift`, `normalize`, `flanger`, `random_semitone_sawtooth_wave` — with full parameter control
+* 💾 Optionally convert output to **portable WAV format**:
+
+  * Mono (1 channel)
   * 16-bit sample width
   * 48,000 Hz sample rate
-  * Valid WAV output using pure Python
-* 📡 Healthcheck endpoint for easy container monitoring
-* 🔌 Built to run in Docker with configurable ports
+* 🔐 Optional API key protection with HTTP Basic Auth (via `API_KEY` env variable)
+* 📡 `/api/healthcheck` endpoint is always public for container monitoring
+* 🐳 Built to run easily in Docker with configurable ports and bind-mounted output
+* ⚡ Fast, lightweight, production-ready thanks to **FastAPI + Piper TTS**
+
 
 ---
 
@@ -75,6 +79,49 @@ Simple healthcheck for the server.
 
 ---
 
+## 🔐 Authentication (Optional)
+
+You can protect your API with **Basic HTTP Authentication** by setting the `API_KEY` environment variable.
+
+### ✅ Behavior
+
+* If `API_KEY` is **not set** (default): all `/api/*` endpoints are publicly accessible.
+* If `API_KEY` **is set**, then:
+
+  * All `/api/*` routes **require Basic Auth**:
+
+    * **Username**: `piper`
+    * **Password**: your `API_KEY` value
+  * The `/api/healthcheck` endpoint remains **public** for monitoring purposes.
+
+### 🔧 Example
+
+Set the environment variable when running the server:
+
+```bash
+export API_KEY=mysecurekey
+uvicorn piper_tts_server:app --host 0.0.0.0 --port 8000
+```
+
+Then access the API like this:
+
+```bash
+curl -u piper:mysecurekey -X POST http://localhost:8000/api/v1/synthesize \
+  -H "Content-Type: application/json" \
+  -d '{ "text": "Bonjour !", "lite_file": true }'
+```
+
+If authentication fails, you'll receive:
+
+```json
+{
+  "detail": "Unauthorized"
+}
+```
+
+---
+
+
 ## 🐳 Running with Docker
 
 ### Use with Docker compose
@@ -89,6 +136,8 @@ services:
     volumes:
       - ./output:/output         # Mount output directory to access generated audio
     restart: unless-stopped
+    environment:
+      - API_KEY: mysecurekey # Optional - set API key for authentication
 ```
 
 The API will be available at: [http://localhost:8080](http://localhost:8080)
