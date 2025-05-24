@@ -4,6 +4,7 @@ from .flanger import apply_flanger
 from .normalize import apply_normalize
 from .pitch_shift import apply_pitch_shift
 from .random_semitone_sawtooth_wave import apply_effect
+from .speed_change import apply_speed_change
 
 
 class EffectChainProcessor:
@@ -14,6 +15,7 @@ class EffectChainProcessor:
             "normalize": apply_normalize,
             "pitch_shift": apply_pitch_shift,
             "random_semitone_sawtooth_wave": apply_effect,
+            "speed_change": apply_speed_change,
         }
 
     def apply_chain(self, audio: np.ndarray, framerate: int, chain: List[Dict[str, Any]]) -> np.ndarray:

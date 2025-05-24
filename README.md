@@ -1,4 +1,4 @@
-# 🗣️ Piper TTS Web Server
+# 🗣️ Webpiper a simple TTS web-service
 
 A simple, containerized web API for real-time text-to-speech (TTS) synthesis using [Piper](https://github.com/rhasspy/piper), powered by FastAPI.
 
@@ -10,7 +10,6 @@ A simple, containerized web API for real-time text-to-speech (TTS) synthesis usi
 * 🪄 Apply custom audio effects via JSON-defined **effect chains**
 * 🎛️ Effects include: `pitch_shift`, `normalize`, `flanger`, `random_semitone_sawtooth_wave` — with full parameter control
 * 💾 Optionally convert output to **portable WAV format**:
-
   * Mono (1 channel)
   * 16-bit sample width
   * 48,000 Hz sample rate
@@ -150,19 +149,22 @@ You can chain multiple effects in the `effects` parameter.
 Each effect has a `name` and optional `params` field.
 
 | Effect Name                     | Description                                               | Parameters                                                             |
-| ------------------------------- | --------------------------------------------------------- | ---------------------------------------------------------------------- |
+|---------------------------------|-----------------------------------------------------------| ---------------------------------------------------------------------- |
 | `flanger`                       | Metallic flanger modulation                               | `rate`, `min_delay`, `max_delay`, `feedback`, `t_offset`, `dry`, `wet` |
 | `pitch_shift`                   | Shifts the pitch up/down                                  | `pitch_change` (-100 to +100)                                          |
 | `random_semitone_sawtooth_wave` | Applies a sawtooth modulation with random semitone shifts | `min_freq`, `max_semitones`, `pitch_duration`, `wet`                   |
 | `normalize`                     | Removes DC offset & normalizes peak amplitude             | No parameters                                                          |
+| `speed_change`                  | Changes the playback speed                                | `speed`                                                                  |
 
 Example:
 
 ```json
-"effects": [
-  { "name": "pitch_shift", "params": { "pitch_change": 10 } },
-  { "name": "normalize", "params": {} }
-]
+{
+  "effects": [
+    { "name": "pitch_shift", "params": { "pitch_change": 10 } },
+    { "name": "normalize", "params": {} }
+  ]
+}
 ```
 
 ## 🎨 Effects parameters
@@ -175,7 +177,6 @@ Each effect should have a `name` and an optional `params` dictionary.
 Applies a metallic-sounding flanger modulation.
 
 **Parameters:**
-
 * `rate` (float): LFO rate in Hz. Controls how fast the pitch shifts. Default: `0.15`
 * `min_delay` (float): Minimum delay in seconds. Sets the starting point for the flanging. Default: `0.0025`
 * `max_delay` (float): Maximum delay in seconds. Sets the depth of the flanging. Default: `0.0035`
@@ -191,7 +192,6 @@ Applies a metallic-sounding flanger modulation.
 Removes DC offset and scales the audio to maximum amplitude.
 
 **Parameters:**
-
 * *(none)*
 
 Note: Automatically centers the waveform and scales it to full 16-bit range.
@@ -203,7 +203,6 @@ Note: Automatically centers the waveform and scales it to full 16-bit range.
 Changes the pitch of the audio without altering its duration.
 
 **Parameters:**
-
 * `pitch_change` (int): Pitch shift amount in semitone percent. Range: `-100` (one octave down) to `+100` (one octave up). Default: `0`
 
 ---
@@ -213,12 +212,25 @@ Changes the pitch of the audio without altering its duration.
 Applies amplitude modulation using a sawtooth wave with random semitone-based frequency changes.
 
 **Parameters:**
-
 * `min_freq` (float): Minimum frequency of the base sawtooth wave in Hz. Example: `170.0`
 * `max_semitones` (int): Max number of semitones to shift up from `min_freq`. Higher = more variation.
 * `pitch_duration` (float): Duration (in seconds) of each pitch modulation segment.
 * `wet` (float): Strength of the effect (0 = no effect, 1 = full modulated signal). Default: `0.5`
 
+---
+
+### ⏩ speed_change
+
+Changes the playback speed of the audio by resampling.
+
+**Parameters:**
+* `speed` (float): Speed adjustment factor. 
+  * 0.0 = no change
+  * Positive values speed up the audio (0.25 = 25% faster)
+  * Negative values slow it down (-0.25 = 25% slower)
+  * Range: around -0.9 to +1.0 is typical for experimental use
+
+⚠️ This effect does alter the duration of the audio. It’s a simple and accurate time-domain resampling.
 
 ---
 
