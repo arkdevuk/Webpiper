@@ -3,3 +3,4 @@ uvicorn[standard]==0.29.0
 pydantic==2.6.4
 numpy==2.2.5
 wave==0.0.2
+piper-tts==1.2.0
